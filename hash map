@@ -1,0 +1,42 @@
+
+bool wordPattern(char* pattern, char* s) {
+    char hash[26][301] = {0};
+    int lens = strlen(s);
+    int lenp = strlen(pattern);
+    int j = 0;
+
+    for (int i = 0; i < lenp; i++) {
+        if (j >= lens) return false;
+
+        char temp[301] = {0};
+        int k = 0;
+
+        while (j < lens && s[j] != ' ') {
+            temp[k++] = s[j++];
+        }
+
+        if (j < lens) j++;
+
+        int idx = pattern[i] - 'a';
+
+        if (hash[idx][0] == '\0')
+            strcpy(hash[idx], temp);
+        else if (strcmp(hash[idx], temp) != 0)
+            return false;
+    }
+
+    if (j < lens) return false;
+
+    for (int i = 0; i < 26; i++) {
+        if (hash[i][0] == '\0') continue;
+
+        for (int j = i + 1; j < 26; j++) {
+            if (hash[j][0] != '\0' &&
+                strcmp(hash[i], hash[j]) == 0) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
